@@ -8,11 +8,8 @@ SetEnviron.SetEnviron()
 
 bucket_name = os.environ['S3_BUCKET_NAME']
 
-
 s3_client = boto3.client('s3')
 s3 = boto3.resource('s3')
-
-
 
 
 def create_bucket():
@@ -29,8 +26,6 @@ def create_bucket():
         print(e)
 
 
-
-
 def create_directory_inside_s3(directory_path):
 
     def does_directory_exist_or_create(bucket_name, directory_path):
@@ -43,7 +38,6 @@ def create_directory_inside_s3(directory_path):
         else:
             return False
 
-
     if does_directory_exist_or_create(bucket_name, directory_path):
         print(f"The directory '{directory_path}' exists in the bucket '{bucket_name}'.")
     else:
@@ -51,8 +45,6 @@ def create_directory_inside_s3(directory_path):
         bucket = s3.Bucket(bucket_name)
         directory_name = directory_path
         bucket.put_object(Key=directory_name)
-
-
 
 
 def upload_file_to_s3(local_file_path, s3_file_path):
