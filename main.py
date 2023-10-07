@@ -11,15 +11,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.select import Select
 
-chrome_options = Options()
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--disable-dev-shm-usage')
-# chrome_options.add_argument('--headless')
-# chrome_options.add_argument('--remote-debugging-port=8989')
-
-# driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
-# # driver = webdriver.Chrome()
-# wait = WebDriverWait(driver, 30)
+driver = webdriver.Chrome()
+wait = WebDriverWait(driver, 30)
 
 
 
@@ -121,20 +114,16 @@ def main():
         for article_file in scraped_articles:
             rewritten_article_full_path = f"{rewritten_articles_folder_name}/{article_file}"
             AwsFunctions.upload_file_to_s3(rewritten_article_full_path, rewritten_article_full_path)
+            
 
-
-
-    # create_initial_files_structure()
-    # remove_old_file()
-    # scrap_links_from_all_sites()
-    # scrap_articles_from_all_links()
-    # upload_scraped_articles_to_s3()
+    create_initial_files_structure()
+    remove_old_file()
+    scrap_links_from_all_sites()
+    scrap_articles_from_all_links()
+    upload_scraped_articles_to_s3()
     rewrite_articles()
-
-    # upload_rewritted_article_to_s3()
-
-
-    # driver.close()
+    upload_rewritted_article_to_s3()
+    driver.close()
 
 
 if __name__=="__main__":
