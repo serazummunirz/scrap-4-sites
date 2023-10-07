@@ -4,7 +4,7 @@ import MonthNumber
 
 
 
-def prnewswire_links(driver, wait, keyword, search_date, search_month, search_year, file_name, pagesize, page_range, total_articles):
+def prnewswire_links(driver, wait, keyword, search_date, search_month, search_year, file_name, pagesize, page_range, total_articles, WebDriverWait):
 
     page = 1
 
@@ -50,12 +50,13 @@ def prnewswire_links(driver, wait, keyword, search_date, search_month, search_ye
             break
 
 
-def sec_links(driver, wait, keyword, search_date, search_month, search_year, file_name, pagesize, page_range, total_articles):
+def sec_links(driver, wait, keyword, search_date, search_month, search_year, file_name, pagesize, page_range, total_articles, WebDriverWait):
 
     month_number = MonthNumber.get_month_number
     url_month = month_number(search_month)
 
-    url = f"https://www.sec.gov/news/pressreleases?aId=&combine={keyword}&year={search_year}&month={url_month}"
+    # url = f"https://www.sec.gov/news/pressreleases?aId=&combine={keyword}&year={search_year}&month={url_month}"
+    url = f"https://www.sec.gov/news/pressreleases?aId=&combine=a"
 
     driver.get(url)
     source_code = driver.page_source
@@ -73,18 +74,18 @@ def sec_links(driver, wait, keyword, search_date, search_month, search_year, fil
             date_posted = odd_element.find('time', {"class": "datetime"}).text
             splited_date_posted = date_posted.split(",")
             actual_date_posted = f"{splited_date_posted[0].split()[0][:3].upper()} {splited_date_posted[0].split()[1]} {splited_date_posted[1].strip()}"
-            if actual_date_posted == searched_date:
-                base_url = "https://www.sec.gov"
-                article_url = odd_element.find('a', {"hreflang": "en"}).get('href')
-                full_url = base_url + article_url
-                print(actual_date_posted)
-                print(full_url)
+            # if actual_date_posted == searched_date:
+            base_url = "https://www.sec.gov"
+            article_url = odd_element.find('a', {"hreflang": "en"}).get('href')
+            full_url = base_url + article_url
+            print(actual_date_posted)
+            print(full_url)
 
-                with open(file_name, "a") as f:
-                    f.write(full_url + '\n')
-                    total_scraped += 1
-            else:
-                break
+            with open(file_name, "a") as f:
+                f.write(full_url + '\n')
+                total_scraped += 1
+            # else:
+            #     break
         else:
             break
 
@@ -94,24 +95,24 @@ def sec_links(driver, wait, keyword, search_date, search_month, search_year, fil
             date_posted = odd_element.find('time', {"class": "datetime"}).text
             splited_date_posted = date_posted.split(",")
             actual_date_posted = f"{splited_date_posted[0].split()[0][:3].upper()} {splited_date_posted[0].split()[1]} {splited_date_posted[1].strip()}"
-            if actual_date_posted == searched_date:
-                base_url = "https://www.sec.gov"
-                article_url = odd_element.find('a', {"hreflang": "en"}).get('href')
-                full_url = base_url + article_url
-                print(actual_date_posted)
-                print(full_url)
+            # if actual_date_posted == searched_date:
+            base_url = "https://www.sec.gov"
+            article_url = odd_element.find('a', {"hreflang": "en"}).get('href')
+            full_url = base_url + article_url
+            print(actual_date_posted)
+            print(full_url)
 
-                with open(file_name, "a") as f:
-                    f.write(full_url + '\n')
-                    total_scraped += 1
-            else:
-                break
+            with open(file_name, "a") as f:
+                f.write(full_url + '\n')
+                total_scraped += 1
+            # else:
+            #     break
         else:
             break
 
 
 
-def lseg_links(driver, wait, EC, By, keyword, search_date, search_month, search_year, file_name, pagesize, page_range, total_articles):
+def lseg_links(driver, wait, EC, By, keyword, search_date, search_month, search_year, file_name, pagesize, page_range, total_articles, WebDriverWait):
 
     url = f"https://www.lseg.com/en/media-centre/press-releases?q={keyword}"
 
@@ -158,8 +159,6 @@ def lseg_links(driver, wait, EC, By, keyword, search_date, search_month, search_
 
                     if actual_date_posted == searched_date:
                         article_url = result.find('a', {'class': 'tr-SearchResults-resultTitle track-custom-clicks'}).get('href')
-
-                        print(searched_date)
                         print(actual_date_posted)
                         print(article_url)
                         with open(file_name, "a") as f:
@@ -193,7 +192,7 @@ def lseg_links(driver, wait, EC, By, keyword, search_date, search_month, search_
 
 
 
-def businesswire_links(driver, wait, EC, By, keyword, search_date, search_month, search_year, file_name, pagesize, page_range, total_articles):
+def businesswire_links(driver, wait, EC, By, keyword, search_date, search_month, search_year, file_name, pagesize, page_range, total_articles, WebDriverWait):
 
     page = 1
 
@@ -201,49 +200,50 @@ def businesswire_links(driver, wait, EC, By, keyword, search_date, search_month,
 
     for _ in range(page_range):
 
-        url = f"https://www.businesswire.com/portal/site/home/search/?searchType=news&searchTerm={keyword}&searchPage={page}"
-        driver.get(url)
+        if total_scraped < int(total_articles):
 
-        while True:
+            url = f"https://www.businesswire.com/portal/site/home/search/?searchType=news&searchTerm={keyword}&searchPage={page}"
+            driver.get(url)
+            time.sleep(3)
 
-            if total_scraped < int(total_articles):
+            while True:
 
-                try:
-                    news_section = wait.until(EC.presense_of_elements_located((By.XPATH, "//ul[contains(@class,'bw-news-list')and not(contains(@id,'bw-more-news-list'))]//li")))
-                except:
-                    break
+                if total_scraped < int(total_articles):
 
-                page_source = driver.page_source
-                soup = BeautifulSoup(page_source, "html.parser")
-                inner_tables = soup.findAll('ul', {'class': 'bw-news-list'})
-                if len(inner_tables) > 0:
-                    for inner_table in inner_tables:
-                        if total_scraped < int(total_articles):
-                            tables = inner_table.findAll('li')
-                            for table in tables:
-                                if total_scraped < int(total_articles):
-                                    searched_date = f"{search_month} {search_date} {search_year}"
-                                    date_posted = table.find('time').text
-                                    splited_date_posted = date_posted.split(",")
-                                    month_date_splitted = splited_date_posted[0].split()[0]
-                                    month_formatted = splited_date_posted[0].split()[0]
-                                    date_formatted = splited_date_posted[0].split()[1]
-                                    actual_date_posted = f"{month_formatted[:3].upper()} {date_formatted} {splited_date_posted[1].strip()}"
-                                    if actual_date_posted == searched_date:
-                                        print("Matched:", actual_date_posted)
-                                        article_url = table.find('a').get('href')
-                                        print(article_url)
-                                        with open(file_name, "a") as f:
-                                                f.write(article_url + '\n')
-                                        total_scraped += 1
+                    page_source = driver.page_source
+                    soup = BeautifulSoup(page_source, "html.parser")
+                    inner_tables = soup.findAll('ul', {'class': 'bw-news-list'})
+                    if len(inner_tables) > 0:
+                        for inner_table in inner_tables:
+                            if total_scraped < int(total_articles):
+                                tables = inner_table.findAll('li')
+                                for table in tables:
+                                    if total_scraped < int(total_articles):
+                                        searched_date = f"{search_month} {search_date} {search_year}"
+                                        date_posted = table.find('time').text
+                                        splited_date_posted = date_posted.split(",")
+                                        month_date_splitted = splited_date_posted[0].split()[0]
+                                        month_formatted = splited_date_posted[0].split()[0]
+                                        date_formatted = splited_date_posted[0].split()[1]
+                                        actual_date_posted = f"{month_formatted[:3].upper()} {date_formatted} {splited_date_posted[1].strip()}"
+                                        if actual_date_posted == searched_date:                                        
+                                            article_url = table.find('a').get('href')
+                                            print(article_url)
+                                            with open(file_name, "a") as f:
+                                                    f.write(article_url + '\n')
+                                            total_scraped += 1
+                                        else:
+                                            break
                                     else:
                                         break
-                                else:
-                                    break
-                        else:
-                            break
+                            else:
+                                break
+                        break
+                    else:
+                        break
+                else:
                     break
-            else:
-                break
 
-        page += 1
+            page += 1
+        else:
+            break
