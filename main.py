@@ -102,8 +102,8 @@ def main():
         sec_links = GetLinks.sec_links
         sec_links(driver, wait, keyword, search_date, search_month, search_year, source_list_local_path, pagesize, page_range, total_articles, WebDriverWait)
 
-        lseg_links = GetLinks.lseg_links
-        lseg_links(driver, wait, EC, By, keyword, search_date, search_month, search_year, source_list_local_path, pagesize, page_range, total_articles, WebDriverWait)
+        # lseg_links = GetLinks.lseg_links
+        # lseg_links(driver, wait, EC, By, keyword, search_date, search_month, search_year, source_list_local_path, pagesize, page_range, total_articles, WebDriverWait)
 
         businesswire_links = GetLinks.businesswire_links
         businesswire_links(driver, wait, EC, By, keyword, search_date, search_month, search_year, source_list_local_path, pagesize, page_range, total_articles, WebDriverWait)
@@ -144,8 +144,8 @@ def main():
     scrap_links_from_all_sites()
     scrap_articles_from_all_links()
     upload_scraped_articles_to_s3()
-    rewrite_articles()
-    upload_rewritted_article_to_s3()
+    # rewrite_articles()
+    # upload_rewritted_article_to_s3()
     driver.close()
 
 
