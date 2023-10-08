@@ -3,6 +3,14 @@ from bs4 import BeautifulSoup
 
 from selenium import webdriver
 
+# import undetected_chromedriver as uc
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.select import Select
+
 #Chrome profile directory.
 chrome_profile = "C:\\Users\\Administrator\\chrome_profile"
 
@@ -13,18 +21,8 @@ chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument(f'--user-data-dir={chrome_profile}')
 chrome_options.add_argument('--disable-dev-shm-usage')
 
-
-# import undetected_chromedriver as uc
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.select import Select
-
 driver = webdriver.Chrome(options=chrome_options)
 wait = WebDriverWait(driver, 30)
-
 
 # Import program functions
 import SetEnviron
@@ -67,17 +65,19 @@ source_list_s3_path = f"{source_list_folder_name}/{file_name}"
 def main():
 
     AwsFunctions.create_bucket()
-
+    
 
     def setup_proxy():
-        driver.get("https://ifconfig.me/ip")
-        user_command = input("Are you done setting up proxy? (y/n):")
+        user_command = input("Do you need to set up proxy? (y/n):")
         if user_command.lower() == 'y':
-            driver.refresh()
-            time.sleep(3)
-            print("Continuing with script...")
+            driver.get("https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif")
+            proxy_is_set = input("Are you done setting up the proxy? (y/n):")
+            if proxy_is_set.lower() == 'y':
+                pass
+            else:
+                exit()
         else:
-            exit()
+            pass
 
 
     def create_initial_files_structure():
