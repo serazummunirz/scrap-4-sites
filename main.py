@@ -9,7 +9,7 @@ chrome_profile = "C:\\Users\\Administrator\\chrome_profile"
 if not os.path.exists(chrome_profile):
     os.mkdir(chrome_profile)
 
-chrome_options = Options()
+chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument(f'--user-data-dir={chrome_profile}')
 chrome_options.add_argument('--disable-dev-shm-usage')
 
