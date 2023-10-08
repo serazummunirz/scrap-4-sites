@@ -20,6 +20,7 @@ if not os.path.exists(chrome_profile):
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument(f'--user-data-dir={chrome_profile}')
 chrome_options.add_argument('--disable-dev-shm-usage')
+# chrome_options.add_argument('--headless')
 
 driver = webdriver.Chrome(options=chrome_options)
 wait = WebDriverWait(driver, 30)
