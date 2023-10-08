@@ -68,6 +68,18 @@ def main():
 
     AwsFunctions.create_bucket()
 
+
+    def setup_proxy():
+        driver.get("https://ifconfig.me/ip")
+        user_command = input("Are you done setting up proxy? (y/n):")
+        if user_command.lower() == 'y':
+            driver.refresh()
+            time.sleep(3)
+            print("Continuing with script...")
+        else:
+            exit()
+
+
     def create_initial_files_structure():
         if not os.path.exists(source_list_folder_name):
             os.mkdir(source_list_folder_name)
@@ -126,6 +138,7 @@ def main():
             AwsFunctions.upload_file_to_s3(rewritten_article_full_path, rewritten_article_full_path)
             
 
+    setup_proxy()
     create_initial_files_structure()
     remove_old_file()
     scrap_links_from_all_sites()
