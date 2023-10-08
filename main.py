@@ -3,6 +3,17 @@ from bs4 import BeautifulSoup
 
 from selenium import webdriver
 
+#Chrome profile directory.
+chrome_profile = "C:\\Users\\Administrator\\chrome_profile"
+
+if not os.path.exists(chrome_profile):
+    os.mkdir(chrome_profile)
+
+chrome_options = Options()
+chrome_options.add_argument(f'--user-data-dir={chrome_profile}')
+chrome_options.add_argument('--disable-dev-shm-usage')
+
+
 # import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -13,7 +24,6 @@ from selenium.webdriver.support.select import Select
 
 driver = webdriver.Chrome()
 wait = WebDriverWait(driver, 30)
-
 
 
 # Import program functions
